@@ -1,0 +1,55 @@
+{
+  "captured_at": "2026-10-08T13:27:36.516Z",
+  "request": {
+    "body": {
+      "start_timestamp": 1791379714772,
+      "type": "latest_in_range"
+    },
+    "method": "POST",
+    "path": "/v1/devices/{device_id}/media/image/download"
+  },
+  "step1": {
+    "body": null,
+    "header_names": [
+      "content-length",
+      "date",
+      "location",
+      "server",
+      "x-envoy-upstream-service-time",
+      "x-request-id"
+    ],
+    "headers": {
+      "location": "https://download-ap-northeast-1.prod.phoenix.devices.amazon.dev/v1/download?<redacted>",
+      "x-request-id": "680b7b87-c45b-45f6-9da8-e07584f6c774"
+    },
+    "status": 303
+  },
+  "step2": {
+    "body": {
+      "errors": [
+        {
+          "code": "GRECO_NO_VALID_KEY",
+          "detail": "No valid Greco key available for decryption",
+          "id": "680b7b87-c45b-45f6-9da8-e07584f6c774",
+          "meta": {
+            "timestamp": "2026-10-08T13:27:36Z"
+          },
+          "status": "422"
+        }
+      ]
+    },
+    "header_names": [
+      "connection",
+      "content-length",
+      "content-type",
+      "date",
+      "x-request-id"
+    ],
+    "headers": {
+      "content-length": "201",
+      "content-type": "application/json",
+      "x-request-id": "680b7b87-c45b-45f6-9da8-e07584f6c774"
+    },
+    "status": 422
+  }
+}

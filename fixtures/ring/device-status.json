@@ -1,16 +1,7 @@
 {
-  "captured_at": "2026-10-08T12:43:13.914Z",
-  "request": {
-    "method": "GET",
-    "path": "/v1/devices/{device_id}/status"
-  },
-  "status": 200,
   "body": {
     "data": {
-      "type": "device-status",
-      "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b",
       "attributes": {
-        "state": null,
         "audio": {
           "snooze": {
             "active": null,
@@ -18,11 +9,20 @@
           }
         },
         "online": true,
-        "reported_at": "2026-10-08T12:17:57Z"
-      }
+        "reported_at": "2026-10-08T13:25:14Z",
+        "state": null
+      },
+      "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b",
+      "type": "device-status"
     },
     "meta": {
-      "time": "2026-10-08T12:43:13Z"
+      "time": "2026-10-08T13:27:32Z"
     }
-  }
+  },
+  "captured_at": "2026-10-08T13:27:32.419Z",
+  "request": {
+    "method": "GET",
+    "path": "/v1/devices/{device_id}/status"
+  },
+  "status": 200
 }

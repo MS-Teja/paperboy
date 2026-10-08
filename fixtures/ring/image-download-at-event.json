@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-10-08T13:27:39.138Z",
+  "request": {
+    "body": {
+      "timestamp": 1791465915510,
+      "type": "at_timestamp"
+    },
+    "method": "POST",
+    "path": "/v1/devices/{device_id}/media/image/download"
+  },
+  "step1": {
+    "body": null,
+    "header_names": [
+      "content-length",
+      "date",
+      "location",
+      "server",
+      "x-envoy-upstream-service-time",
+      "x-request-id"
+    ],
+    "headers": {
+      "location": "https://download-ap-northeast-1.prod.phoenix.devices.amazon.dev/v1/download?<redacted>",
+      "x-request-id": "28f8d77e-4fb0-4cf8-a591-287d0e0ca6b8"
+    },
+    "status": 303
+  },
+  "step2": {
+    "header_names": [
+      "accept-ranges",
+      "connection",
+      "content-encryption",
+      "content-length",
+      "content-type",
+      "date",
+      "last-modified",
+      "x-media-origin",
+      "x-media-timestamp",
+      "x-request-id"
+    ],
+    "headers": {
+      "content-length": "39817",
+      "content-type": "image/jpeg",
+      "x-media-origin": "recording",
+      "x-media-timestamp": "1791465915510",
+      "x-request-id": "28f8d77e-4fb0-4cf8-a591-287d0e0ca6b8"
+    },
+    "image_bytes": 39817,
+    "status": 200
+  }
+}

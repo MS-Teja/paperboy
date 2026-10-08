@@ -1,73 +1,64 @@
 {
-  "captured_at": "2026-10-08T12:43:12.490Z",
-  "request": {
-    "method": "GET",
-    "path": "/v1/devices?include=status,capabilities,configurations,location"
-  },
-  "status": 200,
   "body": {
     "data": [
       {
-        "type": "devices",
-        "id": "ava1.ring.device.fixture-f4255a5bd9f8",
         "attributes": {
-          "name": "Playground Device",
-          "image_url": "https://app-content.ring.com/shared/images/devices/square_device_images/DoorbellPro/rvdp_3x.png"
+          "image_url": "https://app-content.ring.com/shared/images/devices/square_device_images/DoorbellPro/rvdp_3x.png",
+          "name": "Playground Device"
         },
+        "id": "ava1.ring.device.fixture-f4255a5bd9f8",
         "relationships": {
-          "status": {
+          "capabilities": {
             "data": {
-              "type": "device-status",
-              "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b"
+              "id": "ava1.ring.device.capabilities.fixture-217f3369a041",
+              "type": "device-capabilities"
             },
             "links": {
-              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/status"
-            }
-          },
-          "location": {
-            "data": {
-              "type": "locations",
-              "id": "ava1.ring.location.fixture-6de73718179b"
-            },
-            "links": {
-              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/location"
+              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/capabilities"
             }
           },
           "configurations": {
             "data": {
-              "type": "device-configurations",
-              "id": "ava1.ring.device.configurations.fixture-bea2b1a6389e"
+              "id": "ava1.ring.device.configurations.fixture-bea2b1a6389e",
+              "type": "device-configurations"
             },
             "links": {
               "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/configurations"
             }
           },
-          "capabilities": {
+          "location": {
             "data": {
-              "type": "device-capabilities",
-              "id": "ava1.ring.device.capabilities.fixture-217f3369a041"
+              "id": "ava1.ring.location.fixture-6de73718179b",
+              "type": "locations"
             },
             "links": {
-              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/capabilities"
+              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/location"
+            }
+          },
+          "status": {
+            "data": {
+              "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b",
+              "type": "device-status"
+            },
+            "links": {
+              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/status"
             }
           }
-        }
+        },
+        "type": "devices"
       }
     ],
     "included": [
       {
-        "type": "locations",
-        "id": "ava1.ring.location.fixture-6de73718179b",
         "attributes": {
           "country": "US",
           "state": "CA"
-        }
+        },
+        "id": "ava1.ring.location.fixture-6de73718179b",
+        "type": "locations"
       },
       {
-        "type": "device-status",
-        "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b",
         "attributes": {
-          "reported_at": "2026-10-08T12:17:57Z",
           "audio": {
             "snooze": {
               "active": null,
@@ -75,33 +66,24 @@
             }
           },
           "online": true,
+          "reported_at": "2026-10-08T13:25:14Z",
           "state": null
-        }
+        },
+        "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b",
+        "type": "device-status"
       },
       {
-        "type": "device-capabilities",
-        "id": "ava1.ring.device.capabilities.fixture-217f3369a041",
         "attributes": {
-          "video": {
-            "configurations": [
-              "resolution_mode"
-            ],
-            "codecs": [
-              "AVC"
-            ],
-            "ratio": "16:9",
-            "max_resolution": 1080,
-            "supported_resolutions": [
-              1080
-            ]
-          },
           "audio": {
             "customizable_slots": null,
             "supported_actions": null
           },
-          "freeze_detection": null,
           "battery_status": null,
+          "co_detection_listener": null,
+          "contact_detection": null,
           "flood_detection": null,
+          "freeze_detection": null,
+          "glass_break_detection": null,
           "image_enhancements": {
             "configurations": [
               "color_night_vision",
@@ -109,36 +91,46 @@
               "snapshot"
             ]
           },
-          "co_detection_listener": null,
           "motion_detection": {
             "configurations": [
               "enabled",
               "motion_zones"
             ]
           },
-          "contact_detection": null,
+          "smoke_detection": null,
           "tamper_detection": null,
-          "glass_break_detection": null,
-          "smoke_detection": null
-        }
+          "video": {
+            "codecs": [
+              "AVC"
+            ],
+            "configurations": [
+              "resolution_mode"
+            ],
+            "max_resolution": 1080,
+            "ratio": "16:9",
+            "supported_resolutions": [
+              1080
+            ]
+          }
+        },
+        "id": "ava1.ring.device.capabilities.fixture-217f3369a041",
+        "type": "device-capabilities"
       },
       {
-        "type": "device-configurations",
-        "id": "ava1.ring.device.configurations.fixture-bea2b1a6389e",
         "attributes": {
-          "image_enhancements": {
-            "color_night_vision": "off",
-            "hdr": "off",
-            "ir_led_night_vision": "off",
-            "auto_zoom_track": "off",
-            "privacy_zones": []
+          "audio": {
+            "customizable_slots": null,
+            "volume": 11
           },
           "e2e_encryption": {
             "enabled": false
           },
-          "audio": {
-            "customizable_slots": null,
-            "volume": 11
+          "image_enhancements": {
+            "auto_zoom_track": "off",
+            "color_night_vision": "off",
+            "hdr": "off",
+            "ir_led_night_vision": "off",
+            "privacy_zones": []
           },
           "motion_detection": {
             "enabled": "on",
@@ -182,11 +174,19 @@
               }
             ]
           }
-        }
+        },
+        "id": "ava1.ring.device.configurations.fixture-bea2b1a6389e",
+        "type": "device-configurations"
       }
     ],
     "meta": {
-      "time": "2026-10-08T12:43:12Z"
+      "time": "2026-10-08T13:27:30Z"
     }
-  }
+  },
+  "captured_at": "2026-10-08T13:27:31.077Z",
+  "request": {
+    "method": "GET",
+    "path": "/v1/devices?include=status,capabilities,configurations,location"
+  },
+  "status": 200
 }

@@ -42,17 +42,17 @@ Each entry records the date (IST), task, steps taken, expected and actual result
 - **Workaround:** `pnpm ring:smoke` runs first each session and prints one clear line asking for a new token when it gets a `401`.
 - **Suggestion:** Offer a longer-lived Playground token (for example 8 hours), or a Playground refresh token, for hackathon and prototyping use.
 
-## 4. Playground event simulation isn't mentioned in the API docs
+## 4. Playground event simulation isn't mentioned in the API docs, and only makes live-view events
 
 - **Date:** 2026-10-08
 - **Area:** Ring Developer Playground, Ring MCP docs, Event History and Image Download APIs
 - **Task:** `pnpm ring:smoke` and `pnpm ring:capture`: read recent events and download one snapshot.
-- **Steps taken:** Listed devices (one "Playground Device", DoorbellPro, online). Called `GET /v1/history/devices/{id}/events` with and without `event_types=motion.human,ding`. Called `POST /v1/devices/{id}/media/image/download` with `latest_in_range` over the last 24 hours, then followed the `303` to the pre-signed URL. Searched the Ring MCP docs for how to generate Playground events.
-- **Expected:** Docs explaining how to produce test events and media on the Playground device.
-- **Actual:** With nothing simulated yet, history returns `{"data": []}` for every filter. The image request is accepted (`303`), but the download returns `416 MEDIA_NOT_FOUND`. The Playground page has a "simulate motion" button, but the API docs and the MCP server never mention it, so the empty responses looked like a dead end until the button was found by hand. Whether simulated motion produces history events and a downloadable image is still to be checked.
-- **Severity:** Medium (the rhythm engine and snapshot check both depend on events and images)
-- **Workaround:** Use the Playground's simulate-motion button, then re-run `ring:smoke` and `ring:capture`.
-- **Suggestion:** Document Playground event simulation in the Event History and Image Download pages, and index it in the MCP server.
+- **Steps taken:** Listed devices (one "Playground Device", DoorbellPro, online). Called `GET /v1/history/devices/{id}/events` with and without `event_types=motion.human,ding`, and requested an image. Searched the Ring MCP docs for how to generate Playground events. Then used the Playground's "Simulate live view event" buttons (Package, Vehicle, Motion) and repeated the calls.
+- **Expected:** Docs explaining how to produce test events and media; simulated "Motion" producing a `motion` event.
+- **Actual:** Before simulating, history was `{"data": []}` and image download returned `416 MEDIA_NOT_FOUND`. The simulate buttons aren't mentioned in the API docs or the MCP server. Each button starts a WHEP live view playing a pre-recorded clip, and history records it as `on_demand`, never `motion` or `ding`, whichever button is pressed. There's no way to produce the motion or doorbell events an app actually reacts to.
+- **Severity:** Medium (the rhythm engine needs human-motion and doorbell events)
+- **Workaround:** Live-view events give real event IDs, timestamps and a downloadable recorded frame. The 14-day baseline uses replayed events labelled REPLAYED.
+- **Suggestion:** Document the simulate buttons, and have "Motion" (plus a "Doorbell press") emit real `motion` / `ding` history events and webhooks.
 
 ## 5. Event names and subtypes differ between Event History and webhooks
 
@@ -61,9 +61,9 @@ Each entry records the date (IST), task, steps taken, expected and actual result
 - **Task:** Define one internal "activity signal" from both history polling and webhooks.
 - **Steps taken:** Read the Event History and Notifications docs through the Ring MCP server.
 - **Expected:** One event vocabulary across both delivery paths.
-- **Actual:** Webhooks use `motion_detected` (with a `subType` such as `human`) and `button_press`. History uses `motion`, `on_demand` and `ding`, and the documented history response has no subtype field: `motion.human` exists only as an `event_types` filter. A client that wants "human motion" from history has to encode the subtype in its query. Not yet confirmed against real data, because Playground history was empty (entry 4).
+- **Actual:** Webhooks use `motion_detected` (with a `subType` such as `human`) and `button_press`. History uses `motion`, `on_demand` and `ding`, and the documented history response has no subtype field: `motion.human` exists only as an `event_types` filter. A client that wants "human motion" from history has to encode the subtype in its query. Confirmed against real data: history events carry no subtype attribute, only an undocumented `cv_detections` relationship (entry 7).
 - **Severity:** Medium
-- **Workaround:** Poll history with `event_types=motion.human,ding` and map results to the webhook vocabulary in one place in `ring-partner-kit`.
+- **Workaround:** Map history types to the webhook vocabulary in one place in `ring-partner-kit`, and filter by `event_type` in code (entry 7).
 - **Suggestion:** Return `sub_type` on history events and publish a table mapping history types to webhook types.
 
 ## 6. Small differences between the docs and live responses
@@ -80,3 +80,27 @@ Each entry records the date (IST), task, steps taken, expected and actual result
 - **Severity:** Low
 - **Workaround:** Treat `links` as optional, follow the `Location` header whatever its host, and rely on captured fixtures over doc examples.
 - **Suggestion:** Generate doc examples from live responses, and list the required scope on each endpoint.
+
+## 7. Undocumented `cv_detections` relationship, and `event_types` filter not applied
+
+- **Date:** 2026-10-08
+- **Area:** Ring Event History API
+- **Task:** Parse real history events after simulating live views in the Playground.
+- **Steps taken:** `GET /v1/history/devices/{id}/events`, with and without `event_types=motion.human,ding`; parsed with a schema written from the docs.
+- **Expected:** Events shaped like the documented example, and the filtered call returning only human motion and doorbell events.
+- **Actual:** Every event has a `cv_detections` relationship whose `data` is a list (empty for live views) and a `meta.riid` field; neither is documented. The strict schema rejected the list. The filtered call returned the same three `on_demand` events as the unfiltered one, so the filter was ignored.
+- **Severity:** Medium (a filter that silently returns everything would make every live view look like human activity)
+- **Workaround:** Accept to-one and to-many relationships, keep schemas loose, and always check `event_type` in code rather than trusting the filter.
+- **Suggestion:** Document `cv_detections` (it looks like where motion subtypes live) and `meta.riid`, and return `400` for unsupported filters instead of ignoring them.
+
+## 8. Undocumented `422 GRECO_NO_VALID_KEY` from image download
+
+- **Date:** 2026-10-08
+- **Area:** Ring Image Download API
+- **Task:** Download one doorstep frame for the snapshot check.
+- **Steps taken:** `latest_in_range` over the last 24 hours, then `at_timestamp` at the start of the newest live-view event; followed each `303` to the pre-signed URL.
+- **Expected:** Both return the same recorded frame, or `416` if there is none. The device reports `e2e_encryption.enabled: false`.
+- **Actual:** `at_timestamp` returned a 39 KB JPEG (`X-Media-Origin: recording`). `latest_in_range` returned `422 GRECO_NO_VALID_KEY` ("No valid Greco key available for decryption"). The docs list `422` only as `CORRUPT_RECORDING`, and nothing explains "Greco" keys or why an unencrypted device's media needs one.
+- **Severity:** Medium
+- **Workaround:** Request frames with `at_timestamp` at a known event time; treat any decryption error as verdict `unavailable`.
+- **Suggestion:** Document `GRECO_NO_VALID_KEY`, what causes it, and whether `latest_in_range` is expected to work on Playground devices.

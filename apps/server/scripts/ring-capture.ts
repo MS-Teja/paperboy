@@ -31,8 +31,20 @@ function pickHeaders(res: Response, names: string[]): Record<string, string> {
   return out;
 }
 
+/** Ring returns object keys in varying order; sorting keeps fixture diffs meaningful. */
+function sortKeys(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortKeys);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => [k, sortKeys(v)]),
+    );
+  }
+  return value;
+}
+
 async function save(name: string, fixture: object, token: string) {
-  const text = `${JSON.stringify(scrub({ captured_at: new Date().toISOString(), ...fixture }), null, 2)}\n`;
+  const scrubbed = sortKeys(scrub({ captured_at: new Date().toISOString(), ...fixture }));
+  const text = `${JSON.stringify(scrubbed, null, 2)}\n`;
   if (text.includes(token)) throw new Error(`Refusing to write ${name}: the access token is still present after scrubbing.`);
   await writeFile(new URL(name, FIXTURES_DIR), text);
   console.log(`   wrote fixtures/ring/${name}`);
@@ -46,9 +58,14 @@ async function captureGet(ring: RingClient, token: string, name: string, path: s
   return body;
 }
 
-async function captureImageDownload(ring: RingClient, token: string, deviceId: string) {
+async function captureImageDownload(
+  ring: RingClient,
+  token: string,
+  deviceId: string,
+  name: string,
+  requestBody: Record<string, unknown>,
+) {
   const path = `/v1/devices/${encodeURIComponent(deviceId)}/media/image/download`;
-  const requestBody = { type: 'latest_in_range', start_timestamp: Date.now() - DAY_MS + 60_000 };
   const step1 = await ring.request(path, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -85,7 +102,7 @@ async function captureImageDownload(ring: RingClient, token: string, deviceId: s
     fixture.step2 = step2Info;
   }
 
-  await save('image-download.json', fixture, token);
+  await save(name, fixture, token);
 }
 
 async function main() {
@@ -116,12 +133,23 @@ async function main() {
     const id = encodeURIComponent(deviceId);
     await captureGet(ring, token, 'device-status.json', `/v1/devices/${id}/status`, '/v1/devices/{device_id}/status');
     await captureGet(ring, token, 'history-events.json', `/v1/history/devices/${id}/events`, '/v1/history/devices/{device_id}/events');
-    await captureGet(
+    const history = (await captureGet(
       ring, token, 'history-events-human-or-ding.json',
       `/v1/history/devices/${id}/events?event_types=motion.human,ding`,
       '/v1/history/devices/{device_id}/events?event_types=motion.human,ding',
-    );
-    await captureImageDownload(ring, token, deviceId);
+    )) as { data?: Array<{ attributes?: { start?: number } }> } | null;
+
+    await captureImageDownload(ring, token, deviceId, 'image-download-latest-in-range.json', {
+      type: 'latest_in_range',
+      start_timestamp: Date.now() - DAY_MS + 60_000,
+    });
+    const newestStart = history?.data?.[0]?.attributes?.start;
+    if (newestStart) {
+      await captureImageDownload(ring, token, deviceId, 'image-download-at-event.json', {
+        type: 'at_timestamp',
+        timestamp: newestStart,
+      });
+    }
   } catch (err) {
     if (isTokenExpired(err) || (err as { expired?: boolean }).expired) {
       console.error(TOKEN_EXPIRED_MESSAGE);

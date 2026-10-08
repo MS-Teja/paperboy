@@ -1,11 +1,84 @@
 {
-  "captured_at": "2026-10-08T12:43:15.068Z",
+  "body": {
+    "data": [
+      {
+        "attributes": {
+          "end": 1791465947252,
+          "event_type": "on_demand",
+          "is_third_party_reviewed": true,
+          "start": 1791465915510
+        },
+        "id": "ava1.ring.history.event.fixture-b45d86142a0b",
+        "meta": {
+          "riid": null
+        },
+        "relationships": {
+          "cv_detections": {
+            "data": []
+          },
+          "source": {
+            "data": {
+              "id": "ava1.ring.device.fixture-f4255a5bd9f8",
+              "type": "devices"
+            }
+          }
+        },
+        "type": "history-events"
+      },
+      {
+        "attributes": {
+          "end": 1791465910374,
+          "event_type": "on_demand",
+          "is_third_party_reviewed": true,
+          "start": 1791465870660
+        },
+        "id": "ava1.ring.history.event.fixture-87f763622e7f",
+        "meta": {
+          "riid": null
+        },
+        "relationships": {
+          "cv_detections": {
+            "data": []
+          },
+          "source": {
+            "data": {
+              "id": "ava1.ring.device.fixture-f4255a5bd9f8",
+              "type": "devices"
+            }
+          }
+        },
+        "type": "history-events"
+      },
+      {
+        "attributes": {
+          "end": 1791464057366,
+          "event_type": "on_demand",
+          "is_third_party_reviewed": true,
+          "start": 1791464017651
+        },
+        "id": "ava1.ring.history.event.fixture-3dac8fb06b2c",
+        "meta": {
+          "riid": null
+        },
+        "relationships": {
+          "cv_detections": {
+            "data": []
+          },
+          "source": {
+            "data": {
+              "id": "ava1.ring.device.fixture-f4255a5bd9f8",
+              "type": "devices"
+            }
+          }
+        },
+        "type": "history-events"
+      }
+    ]
+  },
+  "captured_at": "2026-10-08T13:27:33.512Z",
   "request": {
     "method": "GET",
     "path": "/v1/history/devices/{device_id}/events"
   },
-  "status": 200,
-  "body": {
-    "data": []
-  }
+  "status": 200
 }
