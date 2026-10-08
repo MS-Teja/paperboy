@@ -13,3 +13,12 @@ export {
 } from './client.ts';
 export { RingApiError } from './errors.ts';
 export * from './schemas.ts';
+export { fromHistoryEvent, fromWebhook, type RingEvent } from './events.ts';
+export { pollDeviceHistory, type PollOptions } from './poller.ts';
+export {
+  SIGNATURE_HEADER,
+  signWebhookBody,
+  verifyWebhookSignature,
+  WebhookPayloadSchema,
+  type WebhookPayload,
+} from './webhooks.ts';
