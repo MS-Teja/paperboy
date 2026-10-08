@@ -5,9 +5,11 @@ import { z } from 'zod';
 
 const ResourceIdentifier = z.object({ type: z.string(), id: z.string() });
 
+// `data` is one identifier for to-one relationships and a list for to-many ones
+// (history events carry an undocumented to-many `cv_detections`).
 const Relationship = z
   .object({
-    data: ResourceIdentifier.nullable().optional(),
+    data: z.union([ResourceIdentifier, z.array(ResourceIdentifier)]).nullable().optional(),
     links: z.object({ related: z.string().optional() }).loose().optional(),
   })
   .loose();

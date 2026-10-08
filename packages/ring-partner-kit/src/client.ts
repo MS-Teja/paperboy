@@ -78,7 +78,7 @@ export function findIncluded(
   relationship: string,
 ): NonNullable<DeviceList['included']>[number] | undefined {
   const ref = device.relationships?.[relationship]?.data;
-  if (!ref) return undefined;
+  if (!ref || Array.isArray(ref)) return undefined;
   return list.included?.find((r) => r.type === ref.type && r.id === ref.id);
 }
 
