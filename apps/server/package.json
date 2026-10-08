@@ -1,0 +1,14 @@
+{
+  "name": "@paperboy/server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p .",
+    "ring:smoke": "node --env-file-if-exists=../../.env scripts/ring-smoke.ts",
+    "ring:capture": "node --env-file-if-exists=../../.env scripts/ring-capture.ts"
+  },
+  "dependencies": {
+    "ring-partner-kit": "workspace:*",
+    "zod": "^4.6.5"
+  }
+}
