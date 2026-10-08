@@ -1,0 +1,16 @@
+{
+  "name": "ring-partner-kit",
+  "version": "0.1.0",
+  "description": "Small, typed helpers for the Ring Partner API: client, retries, webhook verification, nonces and history polling.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}
