@@ -1,0 +1,11 @@
+{
+  "captured_at": "2026-10-08T12:43:16.406Z",
+  "request": {
+    "method": "GET",
+    "path": "/v1/history/devices/{device_id}/events?event_types=motion.human,ding"
+  },
+  "status": 200,
+  "body": {
+    "data": []
+  }
+}

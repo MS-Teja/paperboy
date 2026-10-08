@@ -1,0 +1,11 @@
+{
+  "captured_at": "2026-10-08T12:43:15.068Z",
+  "request": {
+    "method": "GET",
+    "path": "/v1/history/devices/{device_id}/events"
+  },
+  "status": 200,
+  "body": {
+    "data": []
+  }
+}

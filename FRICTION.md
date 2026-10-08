@@ -41,3 +41,42 @@ Each entry records the date (IST), task, steps taken, expected and actual result
 - **Severity:** Medium
 - **Workaround:** `pnpm ring:smoke` runs first each session and prints one clear line asking for a new token when it gets a `401`.
 - **Suggestion:** Offer a longer-lived Playground token (for example 8 hours), or a Playground refresh token, for hackathon and prototyping use.
+
+## 4. Playground event simulation isn't mentioned in the API docs
+
+- **Date:** 2026-10-08
+- **Area:** Ring Developer Playground, Ring MCP docs, Event History and Image Download APIs
+- **Task:** `pnpm ring:smoke` and `pnpm ring:capture`: read recent events and download one snapshot.
+- **Steps taken:** Listed devices (one "Playground Device", DoorbellPro, online). Called `GET /v1/history/devices/{id}/events` with and without `event_types=motion.human,ding`. Called `POST /v1/devices/{id}/media/image/download` with `latest_in_range` over the last 24 hours, then followed the `303` to the pre-signed URL. Searched the Ring MCP docs for how to generate Playground events.
+- **Expected:** Docs explaining how to produce test events and media on the Playground device.
+- **Actual:** With nothing simulated yet, history returns `{"data": []}` for every filter. The image request is accepted (`303`), but the download returns `416 MEDIA_NOT_FOUND`. The Playground page has a "simulate motion" button, but the API docs and the MCP server never mention it, so the empty responses looked like a dead end until the button was found by hand. Whether simulated motion produces history events and a downloadable image is still to be checked.
+- **Severity:** Medium (the rhythm engine and snapshot check both depend on events and images)
+- **Workaround:** Use the Playground's simulate-motion button, then re-run `ring:smoke` and `ring:capture`.
+- **Suggestion:** Document Playground event simulation in the Event History and Image Download pages, and index it in the MCP server.
+
+## 5. Event names and subtypes differ between Event History and webhooks
+
+- **Date:** 2026-10-08
+- **Area:** Ring Partner API docs (Event History, Notifications)
+- **Task:** Define one internal "activity signal" from both history polling and webhooks.
+- **Steps taken:** Read the Event History and Notifications docs through the Ring MCP server.
+- **Expected:** One event vocabulary across both delivery paths.
+- **Actual:** Webhooks use `motion_detected` (with a `subType` such as `human`) and `button_press`. History uses `motion`, `on_demand` and `ding`, and the documented history response has no subtype field: `motion.human` exists only as an `event_types` filter. A client that wants "human motion" from history has to encode the subtype in its query. Not yet confirmed against real data, because Playground history was empty (entry 4).
+- **Severity:** Medium
+- **Workaround:** Poll history with `event_types=motion.human,ding` and map results to the webhook vocabulary in one place in `ring-partner-kit`.
+- **Suggestion:** Return `sub_type` on history events and publish a table mapping history types to webhook types.
+
+## 6. Small differences between the docs and live responses
+
+- **Date:** 2026-10-08
+- **Area:** Ring Partner API docs
+- **Task:** Confirm documented shapes against captured fixtures (`fixtures/ring/`).
+- **Steps taken:** `pnpm ring:capture`, then compared each response with the MCP docs.
+- **Expected:** Live responses match the documented examples.
+- **Actual:**
+  - Empty history responses have no `links` object at all; the docs say `links.next` may be present even when `data` is empty.
+  - The pre-signed image URL is on `download-ap-northeast-1.prod.phoenix.devices.amazon.dev`, not the documented `media.api.amazonvision.com`. Anyone who allow-lists outbound hosts would be blocked.
+  - The docs don't say which scope image download needs. It turns out a Playground token with only `ava.v1:read` is accepted for this `POST`.
+- **Severity:** Low
+- **Workaround:** Treat `links` as optional, follow the `Location` header whatever its host, and rely on captured fixtures over doc examples.
+- **Suggestion:** Generate doc examples from live responses, and list the required scope on each endpoint.

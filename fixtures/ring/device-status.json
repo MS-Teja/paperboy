@@ -1,0 +1,28 @@
+{
+  "captured_at": "2026-10-08T12:43:13.914Z",
+  "request": {
+    "method": "GET",
+    "path": "/v1/devices/{device_id}/status"
+  },
+  "status": 200,
+  "body": {
+    "data": {
+      "type": "device-status",
+      "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b",
+      "attributes": {
+        "state": null,
+        "audio": {
+          "snooze": {
+            "active": null,
+            "until": null
+          }
+        },
+        "online": true,
+        "reported_at": "2026-10-08T12:17:57Z"
+      }
+    },
+    "meta": {
+      "time": "2026-10-08T12:43:13Z"
+    }
+  }
+}

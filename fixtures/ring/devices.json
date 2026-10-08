@@ -1,0 +1,192 @@
+{
+  "captured_at": "2026-10-08T12:43:12.490Z",
+  "request": {
+    "method": "GET",
+    "path": "/v1/devices?include=status,capabilities,configurations,location"
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "type": "devices",
+        "id": "ava1.ring.device.fixture-f4255a5bd9f8",
+        "attributes": {
+          "name": "Playground Device",
+          "image_url": "https://app-content.ring.com/shared/images/devices/square_device_images/DoorbellPro/rvdp_3x.png"
+        },
+        "relationships": {
+          "status": {
+            "data": {
+              "type": "device-status",
+              "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b"
+            },
+            "links": {
+              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/status"
+            }
+          },
+          "location": {
+            "data": {
+              "type": "locations",
+              "id": "ava1.ring.location.fixture-6de73718179b"
+            },
+            "links": {
+              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/location"
+            }
+          },
+          "configurations": {
+            "data": {
+              "type": "device-configurations",
+              "id": "ava1.ring.device.configurations.fixture-bea2b1a6389e"
+            },
+            "links": {
+              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/configurations"
+            }
+          },
+          "capabilities": {
+            "data": {
+              "type": "device-capabilities",
+              "id": "ava1.ring.device.capabilities.fixture-217f3369a041"
+            },
+            "links": {
+              "related": "/v1/devices/ava1.ring.device.fixture-f4255a5bd9f8/capabilities"
+            }
+          }
+        }
+      }
+    ],
+    "included": [
+      {
+        "type": "locations",
+        "id": "ava1.ring.location.fixture-6de73718179b",
+        "attributes": {
+          "country": "US",
+          "state": "CA"
+        }
+      },
+      {
+        "type": "device-status",
+        "id": "ava1.ring.device.status.fixture-d1ca5a8e6c3b",
+        "attributes": {
+          "reported_at": "2026-10-08T12:17:57Z",
+          "audio": {
+            "snooze": {
+              "active": null,
+              "until": null
+            }
+          },
+          "online": true,
+          "state": null
+        }
+      },
+      {
+        "type": "device-capabilities",
+        "id": "ava1.ring.device.capabilities.fixture-217f3369a041",
+        "attributes": {
+          "video": {
+            "configurations": [
+              "resolution_mode"
+            ],
+            "codecs": [
+              "AVC"
+            ],
+            "ratio": "16:9",
+            "max_resolution": 1080,
+            "supported_resolutions": [
+              1080
+            ]
+          },
+          "audio": {
+            "customizable_slots": null,
+            "supported_actions": null
+          },
+          "freeze_detection": null,
+          "battery_status": null,
+          "flood_detection": null,
+          "image_enhancements": {
+            "configurations": [
+              "color_night_vision",
+              "privacy_zones",
+              "snapshot"
+            ]
+          },
+          "co_detection_listener": null,
+          "motion_detection": {
+            "configurations": [
+              "enabled",
+              "motion_zones"
+            ]
+          },
+          "contact_detection": null,
+          "tamper_detection": null,
+          "glass_break_detection": null,
+          "smoke_detection": null
+        }
+      },
+      {
+        "type": "device-configurations",
+        "id": "ava1.ring.device.configurations.fixture-bea2b1a6389e",
+        "attributes": {
+          "image_enhancements": {
+            "color_night_vision": "off",
+            "hdr": "off",
+            "ir_led_night_vision": "off",
+            "auto_zoom_track": "off",
+            "privacy_zones": []
+          },
+          "e2e_encryption": {
+            "enabled": false
+          },
+          "audio": {
+            "customizable_slots": null,
+            "volume": 11
+          },
+          "motion_detection": {
+            "enabled": "on",
+            "motion_zones": [
+              {
+                "id": "922f9dff-4e13-48e0-a459-17ef9780259f",
+                "vertices": [
+                  {
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "x": 0.5,
+                    "y": 0
+                  },
+                  {
+                    "x": 1,
+                    "y": 0
+                  },
+                  {
+                    "x": 1,
+                    "y": 0.6
+                  },
+                  {
+                    "x": 1,
+                    "y": 1
+                  },
+                  {
+                    "x": 0.5,
+                    "y": 1
+                  },
+                  {
+                    "x": 0,
+                    "y": 1
+                  },
+                  {
+                    "x": 0,
+                    "y": 0.6
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "meta": {
+      "time": "2026-10-08T12:43:12Z"
+    }
+  }
+}
