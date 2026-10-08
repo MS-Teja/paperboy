@@ -10,7 +10,8 @@
     "build": "pnpm -r run build",
     "test": "vitest run",
     "ring:smoke": "pnpm --filter @paperboy/server ring:smoke",
-    "ring:capture": "pnpm --filter @paperboy/server ring:capture"
+    "ring:capture": "pnpm --filter @paperboy/server ring:capture",
+    "intake:poll": "pnpm --filter @paperboy/server intake:poll"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",

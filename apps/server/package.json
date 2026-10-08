@@ -5,10 +5,19 @@
   "scripts": {
     "build": "tsc -p .",
     "ring:smoke": "node --env-file-if-exists=../../.env scripts/ring-smoke.ts",
-    "ring:capture": "node --env-file-if-exists=../../.env scripts/ring-capture.ts"
+    "ring:capture": "node --env-file-if-exists=../../.env scripts/ring-capture.ts",
+    "db:generate": "drizzle-kit generate",
+    "intake:poll": "node --env-file-if-exists=../../.env scripts/intake-poll.ts"
   },
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "drizzle-orm": "^0.45.3",
+    "fastify": "^5.12.5",
     "ring-partner-kit": "workspace:*",
     "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "drizzle-kit": "^0.31.11"
   }
 }

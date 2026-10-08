@@ -16,6 +16,8 @@ export interface RingEvent {
   /** Epoch milliseconds. */
   occurredAt: number;
   via: 'history' | 'webhook';
+  /** The history event or webhook payload exactly as Ring sent it. */
+  raw: unknown;
 }
 
 const HISTORY_TO_WEBHOOK_TYPE: Record<string, string> = {
@@ -32,6 +34,7 @@ export function fromHistoryEvent(event: HistoryEvent, deviceId: string): RingEve
     subType: null,
     occurredAt: event.attributes.start,
     via: 'history',
+    raw: event,
   };
 }
 
@@ -43,5 +46,6 @@ export function fromWebhook(payload: WebhookPayload): RingEvent {
     subType: payload.data.subType ?? null,
     occurredAt: payload.data.attributes.timestamp,
     via: 'webhook',
+    raw: payload,
   };
 }

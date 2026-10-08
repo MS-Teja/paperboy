@@ -41,7 +41,7 @@ describe('webhook signatures', () => {
 
 describe('webhook payloads', () => {
   it('parse the documented motion_detected shape and keep subType', () => {
-    const payload = WebhookPayloadSchema.parse({
+    const body = {
       meta: { version: '1.1', time: '2025-07-06T11:11:00Z', request_id: 'req-9', account_id: 'acct' },
       data: {
         id: 'evt-9',
@@ -50,7 +50,8 @@ describe('webhook payloads', () => {
         attributes: { source: 'dev-1', source_type: 'devices', timestamp: 1699457230000 },
         relationships: { devices: { links: { self: '/v1/devices/dev-1' } } },
       },
-    });
+    };
+    const payload = WebhookPayloadSchema.parse(body);
     expect(fromWebhook(payload)).toEqual({
       id: 'evt-9',
       deviceId: 'dev-1',
@@ -58,6 +59,7 @@ describe('webhook payloads', () => {
       subType: 'human',
       occurredAt: 1699457230000,
       via: 'webhook',
+      raw: body,
     });
   });
 });
